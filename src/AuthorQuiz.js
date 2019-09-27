@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 //import logo from './logo.svg';
 
 import './App.css';
@@ -15,24 +16,48 @@ function Hero() {
   </div>)
 }
 
-function Book({title})
+function Book({title, onClick})
 {
-  return ( <div className = "answer">
+  return ( <div className = "answer" onClick={()=> {onClick(title);}}>
     <h4>{title}</h4>
   </div>)
 }
 
-function Turn(author, books){
+function Turn(props)
+{
+  console.log(props);
+  
+  function mapHighlightToBgColor (highlight){
+    const highlightMapping = {
+      'none': 'white',
+      'correct': 'blue',
+      'wrong': 'orange'
+    }
+    return highlightMapping[highlight];
+  }
 
-  console.log(author);
-  return (<div className="row turn" style={{backgroundColor: "white"}}>
+ // console.log(author.highlight);
+  return (<div className="row turn" style={{backgroundColor: mapHighlightToBgColor(props.highlight)}}>
     <div className="col-4 offset-1">
-      <img src={author.author.imageSrc} className="authorimage" alt="Author"/>
+      <img src={props.author.imageSrc} className="authorimage" alt="Author"/>
     </div>
     <div className="col-6">
-      {Array.from(author.books).map((title)=><Book title={title} key={title}></Book>)} 
+      {Array.from(props.books).map((title)=><Book title={title} key={title} onClick={props.onAnswerSelected}></Book>)} 
     </div>
   </div>)
+  
+ //return <div></div>
+}
+Turn.propTypes ={
+  author: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    imageSource: PropTypes.string.isRequired,
+    imageSrc: PropTypes.string.isRequired,
+    books: PropTypes.arrayOf(PropTypes.string).isRequired
+  }),
+  books: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onAnswerSelected: PropTypes.func.isRequired,
+  highlight: PropTypes.string.isRequired
 }
 
 function Continue(){
@@ -47,30 +72,16 @@ function Footer(){
   </div>);
 }
 
-function TestButton(props){
-  const clickHandler = console.log;
-  return (<button onClick={clickHandler}>Make an Event</button>);
-}
 
-function FaultyCheckBox(props){
-  
-  const faultyCheckHandler = (e) => {
-    e.preventDefault();
-    console.log("Don't tell me what to do, bruh.");
-  };
-
-
-  return(<input type="checkbox" onClick={faultyCheckHandler} />);
-}
-function AuthorQuiz ({turnData}) {
+function AuthorQuiz ({turnData, highlight, onAnswerSelected}) {
+  //console.log(turnData);  
+  //console.log(highlight);
     return (
       <div className="container-fluid">
         <Hero></Hero>
-        <Turn {...turnData}></Turn>
+        <Turn {...turnData} highlight={highlight} onAnswerSelected={onAnswerSelected}></Turn>
         <Continue></Continue>
         <Footer></Footer>
-        <TestButton></TestButton>
-        <FaultyCheckBox />
       </div>
     );
   }
