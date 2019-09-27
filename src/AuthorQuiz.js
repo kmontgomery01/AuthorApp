@@ -25,7 +25,7 @@ function Book({title, onClick})
 
 function Turn(props)
 {
-  console.log(props);
+  //console.log(props);
   
   function mapHighlightToBgColor (highlight){
     const highlightMapping = {
