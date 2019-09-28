@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import AuthorQuiz from './AuthorQuiz';
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter, Route} from 'react-router-dom';
 //import PropTypes from 'prop-types';
 import _ from 'underscore';
 import Paul from './images/PaulStamets.jpeg';
@@ -10,6 +11,7 @@ import Terence from './images/TerranceMcKenna.jpeg';
 import Wilson from './images/WilsonRawls.jpeg';
 import Stephen from './images/StephenKing.jpeg';
 import {shuffle, sample} from 'underscore';
+import {Link} from 'react-router-dom';
 
 
 
@@ -66,9 +68,24 @@ function onAnswerSelected(answer){
     state.highlight=isCorrect ? 'correct' : 'wrong';
     render();
 }
+function App(){
+    return <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected}/>;
+}
+
+function AddAuthorForm(match){
+    return(<div><h1>Add Author</h1>
+    <p>{JSON.stringify(match)}</p>
+    </div>);
+}
 
 function render(){
-    ReactDOM.render(<AuthorQuiz {...state} onAnswerSelected={onAnswerSelected}/>, document.getElementById('root'));
+    ReactDOM.render(
+    <BrowserRouter>
+        <React.Fragment>
+            <Route exact path='/' component={App} />
+            <Route exact path='/add' component={AddAuthorForm} />
+        </React.Fragment>
+    </BrowserRouter>, document.getElementById('root'));
 }
 
 render();

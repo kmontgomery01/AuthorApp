@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import './App.css';
 import './bootstrap.min.css';
 import _ from 'underscore';
-import {Link} from 'react-router-dom';
 
 
 function Hero() {
@@ -73,6 +72,29 @@ function Footer(){
   </div>);
 }
 
+class Identity extends React.Component {
+  constructor(){
+    super();
+    this.state={
+      firstName: "",
+      lastName: ""
+    };
+    this.onFieldChange = this.onFieldChange.bind(this);
+  }
+  onFieldChange(event){
+    this.setState({
+      [event.target.name] : event.target.value
+    });
+  }
+  render(){
+    return(
+    <form>
+      <input type ="text" name="firstName" value={this.state.firstName} placeholder="FirstName" onChange={this.onFieldChange} />
+      <input type = "text" name="lastName" value={this.state.lastName} placeholder="LastName" onChange={this.onFieldChange} />
+    </form>);
+  }
+}
+
 function AuthorQuiz ({turnData, highlight, onAnswerSelected}) {
   //console.log(turnData);  
   //console.log(highlight);
@@ -81,8 +103,8 @@ function AuthorQuiz ({turnData, highlight, onAnswerSelected}) {
         <Hero></Hero>
         <Turn {...turnData} highlight={highlight} onAnswerSelected={onAnswerSelected}></Turn>
         <Continue></Continue>
-        <Link to="/add"><p>Add an Author</p></Link>
         <Footer></Footer>
+        <Identity />
       </div>
     );
   }
